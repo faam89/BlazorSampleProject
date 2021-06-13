@@ -4,23 +4,30 @@
     <EditForm Model="Movie" OnValidSubmit="OnDataAnnotationsValidated">
         <DataAnnotationsValidator />
         <div class="col-lg-12 form-group d-inline-block">
-            <label class="float-right"><strong>عنوان :</strong></label>
-            <InputText class="form-control" @bind-Value="@Movie.Title" />
+            @*<label class="float-right"><strong>عنوان </strong></label>*@
+            @* <InputText class="form-control" @bind-Value="@Movie.Title" />*@
+            <SfTextBox style="font-size: 17px;font-weight: 700;" @bind-value="@Movie.Title" FloatLabelType='@FloatLabelType.Auto' EnableRtl="true" Placeholder="عنوان را وارد کنید" CssClass="e-rtl"></SfTextBox>
+
             <ValidationMessage For="@(()=>Movie.Title)" />
         </div>
         <div class="col-lg-12 form-group d-inline-block">
             <label class="float-right mt-1"><strong>روی پرده :</strong> </label>
-            <InputCheckbox style="margin-top: 1%" class="form-check-inline float-right" @bind-Value="@Movie.InTheater" />
+            @*<InputCheckbox style="margin-top: 1%" class="form-check-inline float-right" @bind-Value="@Movie.InTheater" />*@
+            <SfCheckBox  @bind-Checked="@Movie.InTheater" id="Movie.InTheater"> </SfCheckBox>
+
             <ValidationMessage For="@(()=>Movie.InTheater)" />
         </div>
         <div class="col-lg-12 form-group d-inline-block">
-            <label class="float-right"><strong>پیش نمایش :</strong> </label>
-            <InputText class="form-control" @bind-Value="@Movie.Trailer" />
+            @* <label class="float-right"><strong>پیش نمایش :</strong> </label>
+        <InputText class="form-control" @bind-Value="@Movie.Trailer" />*@
+            <SfTextBox style="font-size: 17px;font-weight: 700;" @bind-value="@Movie.Trailer" FloatLabelType='@FloatLabelType.Auto' EnableRtl="true" Placeholder="پیش نمایش را وارد کنید" CssClass="e-rtl"></SfTextBox>
+
             <ValidationMessage For="@(() => Movie.Trailer)" />
         </div>
         <div class="col-lg-12 form-group">
             <label class="float-right"><strong>تاریخ انتشار :</strong> </label>
-            <InputDate class="form-control" style="text-align: right;" @bind-Value="@(Movie.ReleaseDate)" />
+            @*<InputDate class="form-control" style="text-align: right;" @bind-Value="@(Movie.ReleaseDate)" />*@
+            <SfDateTimePicker EnableRtl="true" TValue="DateTime?" Value="@(Movie.ReleaseDate)" Placeholder='تاریخ انتشار را انتخاب کنید'></SfDateTimePicker>
             <ValidationMessage For="@(() => Movie.ReleaseDate)" />
         </div>
         <div class="col-lg-12 float-right form-group">
@@ -63,8 +70,17 @@
         <SfButton CssClass="e-success" style="float: right; width: 100px; height: 30px;" EnableRtl="false" type="submit" IsPrimary="true">افزودن</SfButton>
 
     </EditForm>
-
 </div>
+<style>
+    .e-input-group .e-label-bottom , .e-label-top {
+        font-weight: bolder !important;
+        font-size: 17px !important;
+    }
+    .e-checkbox-wrapper {
+        margin: 0.5% 1%;
+        float: right;
+    }
+</style>
 
 @code {
 
