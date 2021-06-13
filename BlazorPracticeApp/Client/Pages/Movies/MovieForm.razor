@@ -1,0 +1,136 @@
+﻿@inject IPersonRepo _personRepo
+
+<div style="width:100%">
+    <EditForm Model="Movie" OnValidSubmit="OnDataAnnotationsValidated">
+        <DataAnnotationsValidator />
+        <div class="col-lg-12 form-group d-inline-block">
+            <label class="float-right"><strong>عنوان :</strong></label>
+            <InputText class="form-control" @bind-Value="@Movie.Title" />
+            <ValidationMessage For="@(()=>Movie.Title)" />
+        </div>
+        <div class="col-lg-12 form-group d-inline-block">
+            <label class="float-right mt-1"><strong>روی پرده :</strong> </label>
+            <InputCheckbox style="margin-top: 1%" class="form-check-inline float-right" @bind-Value="@Movie.InTheater" />
+            <ValidationMessage For="@(()=>Movie.InTheater)" />
+        </div>
+        <div class="col-lg-12 form-group d-inline-block">
+            <label class="float-right"><strong>پیش نمایش :</strong> </label>
+            <InputText class="form-control" @bind-Value="@Movie.Trailer" />
+            <ValidationMessage For="@(() => Movie.Trailer)" />
+        </div>
+        <div class="col-lg-12 form-group">
+            <label class="float-right"><strong>تاریخ انتشار :</strong> </label>
+            <InputDate class="form-control" style="text-align: right;" @bind-Value="@(Movie.ReleaseDate)" />
+            <ValidationMessage For="@(() => Movie.ReleaseDate)" />
+        </div>
+        <div class="col-lg-12 float-right form-group">
+            <InputImage Label="پوستر فیلم" ImageURL="@ImageUrl" OnSelectedImage="@PosterSelected" />
+        </div>
+        <div class="row form-group form-markdown">
+            <div class="col-lg-12">
+                <strong class="float-right">تبدیل به متن</strong>
+                <hr class="hrfix" />
+            </div>
+            <div class="col-lg-12">
+                <InputMarkdown class="form-control" @bind-Value="@Movie.Summary" For="@(() => Movie.Summary)" Label="خلاصه فیلم" />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <label class="float-right"><strong>انتخاب ژانر:</strong></label>
+            </div>
+            <div class="col-lg-12">
+                <MultipleSelector Selected="Selected" NotSelected="NotSelected"></MultipleSelector>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <label class="float-right"><strong> بازیگران : </strong></label>
+            </div>
+            <div class="col-lg-12">
+                <MultipleSelectorTypeahead SearchMethod="@SearchMethod" SelectedElements="@SelectedActors" Context="person">
+                    <MyResultTemplate>
+                        <img src="@person.Picture" style="width: 50px" alt="Alternate Text" />
+                        @person.Name
+                    </MyResultTemplate>
+                    <MyListTemplate>
+                        @person.Name / / <input type="text" placeholder="Character" @bind="person.Character" />
+                    </MyListTemplate>
+                </MultipleSelectorTypeahead>
+            </div>
+        </div>
+        @*<button class="btn btn-success float-right mr-3" type="submit">افزودن</button>*@
+        <SfButton CssClass="e-success" style="float: right; width: 100px; height: 30px;" EnableRtl="false" type="submit" IsPrimary="true">افزودن</SfButton>
+
+    </EditForm>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public List<Genre> SelectedGenres { get; set; } = new List<Genre>();
+
+    [Parameter]
+    public List<Genre> NotSelectedGenres { get; set; } = new List<Genre>();
+
+    [Parameter]
+    public Movie Movie { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [Parameter]
+    public List<Person> SelectedActors { get; set; } = new List<Person>();
+
+    private List<MultipleSelectorModel> Selected = new List<MultipleSelectorModel>();
+
+    private List<MultipleSelectorModel> NotSelected = new List<MultipleSelectorModel>();
+
+
+    string ImageUrl;
+
+    protected override void OnInitialized()
+    {
+
+        Selected = SelectedGenres.Select(s => new MultipleSelectorModel(s.Id.ToString(), s.Name)).ToList();
+        NotSelected = NotSelectedGenres.Select(s => new MultipleSelectorModel(s.Id.ToString(), s.Name)).ToList();
+
+        if (!string.IsNullOrEmpty(Movie.Poster))
+        {
+            ImageUrl = Movie.Poster;
+            Movie.Poster = null;
+        }
+    }
+
+    private void PosterSelected(string imageBase64)
+    {
+        Movie.Poster = imageBase64;
+        ImageUrl = null;
+        Console.WriteLine(imageBase64);
+    }
+    private async Task<IEnumerable<Person>> SearchMethod(string searchText)
+    {
+        var res = await _personRepo.GetPeopleByName(searchText);
+        return res;
+        //return new List<Person>()
+        //{
+        //    new Person() {Id = 1, Name = "Mohammad Ordookhani", Picture = "https://toplearn.com/img/user/teachers/user-profile-%DB%8C%DA%A9-%D8%B4%D9%86%D8%A8%D9%87-%DB%B1-%D8%AF%DB%8C-%DB%B1%DB%B3%DB%B9%DB%B8-10360981-541.jpg"},
+        //    new Person() {Id = 2, Name = "Iman Madaeny", Picture = "https://toplearn.com/img/user/teachers/15633_2402cc6d-1d17-6a22-e6cc-39e3248f13a4_%D8%A7%DB%8C%D9%85%D8%A7%D9%86_%D9%85%D8%AF%D8%A7%D8%A6%D9%86%DB%8C.jpg"},
+        //    new Person() {Id = 3, Name = "Younes Ghorbani", Picture = "https://toplearn.com/img/user/teachers/user-profile-%D8%B4%D9%86%D8%A8%D9%87-%DB%B1%DB%B3-%D8%A8%D9%87%D9%85%D9%86-%DB%B1%DB%B3%DB%B9%DB%B7-5445325-745.jpg"},
+        //};
+    }
+
+    private async Task OnDataAnnotationsValidated()
+    {
+        Movie.MovieGenres = Selected.Select(s => new MovieGenre { GenreId = int.Parse(s.Key) }).ToList();
+        Movie.MovieActors = SelectedActors.Select(s => new MovieActor { PersonId = s.Id, Character = s.Character }).ToList();
+
+        if (!string.IsNullOrWhiteSpace(Movie.Poster))
+        {
+            ImageUrl = null;
+        }
+
+        await OnValidSubmit.InvokeAsync(null);
+    }
+}

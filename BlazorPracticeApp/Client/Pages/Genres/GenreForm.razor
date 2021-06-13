@@ -1,0 +1,21 @@
+﻿<div style="width:100%">
+
+    <EditForm Model="genre" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="col-lg-12 form-group">
+            <label class="float-right">
+                <strong>نام ژانر:</strong>
+            </label>
+            <InputText class="form-control" @bind-Value="genre.Name" />
+            <ValidationMessage For="@(()=>genre.Name)" />
+        </div>
+        <SfButton CssClass="e-success" style="float: right; width: 100px; height: 30px;" EnableRtl="false" type="submit" IsPrimary="true">افزودن</SfButton>
+    </EditForm>
+</div>
+@code {
+    [Parameter]
+    public Genre genre { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+}

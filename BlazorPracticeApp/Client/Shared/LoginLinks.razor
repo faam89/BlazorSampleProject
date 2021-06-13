@@ -1,0 +1,13 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <span class="font-weight-bolder">سلام , @context.User.Identity.Name &nbsp; <b style="float:left; padding-left: 10px;">شما با موفقیت لاگین شدید</b></span>
+        <a href="Logout" class="nav-link btn btn-link font-weight-bolder">خروج</a>
+        <a href="http://blazor.net" target="_blank" class="ml-md-auto font-weight-bolder">درباره ما</a>
+    </Authorized>
+    <NotAuthorized>
+        <b style="float:right;">دسترسی شما مجاز نیست</b>
+        <a href="Register" class="nav-link btn btn-link font-weight-bolder">ثبت نام</a>
+        <a href="Login" class="nav-link btn btn-link font-weight-bolder">ورود</a>
+        <a href="http://blazor.net" target="_blank" class="ml-md-auto font-weight-bolder">درباره ما</a>
+    </NotAuthorized>
+</AuthorizeView>

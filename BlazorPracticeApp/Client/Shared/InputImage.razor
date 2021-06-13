@@ -1,0 +1,64 @@
+﻿
+@inject IFileReaderService fileReaderService
+
+<div class=" row">
+    <strong class="float-right ">انتخاب تصویر</strong>
+</div>
+<hr />
+<div class="float-right" style="display: flex">
+    <label class="ml-2" >
+        @Label
+    </label>
+    <div>
+        <input class="form-control-file" type="file" @onchange="ImageFileSelected" @ref="inputElement" accept="png,jpg,jpeg" />
+    </div>
+</div>
+@if (ImageURL != null)
+{
+    <div>
+        <div class="mt-2">
+            <img src="@ImageURL" style="width: 400px; float: right;" />
+        </div>
+    </div>
+}
+@if (ImageBase64 != null)
+{
+    <div>
+        <div class="mt-2">
+            @*<img src="data:image/jpeg,base64;@ImageBase64" style="width: 400px;" />*@
+            <img src="data:image/jpeg;base64, @ImageBase64" style="width: 400px; float: right;" />
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; } = "Image";
+
+    [Parameter]
+    public string ImageURL { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnSelectedImage { get; set; }
+
+    private string ImageBase64;
+
+    ElementReference inputElement;
+
+    async Task ImageFileSelected()
+    {
+        foreach (var file in await fileReaderService.CreateReference(inputElement).EnumerateFilesAsync())
+        {
+            using (MemoryStream memoryStream = await file.CreateMemoryStreamAsync(4 * 1024))
+            {
+                var imageBytes = new byte[memoryStream.Length];
+                memoryStream.Read(imageBytes, 0, (int)memoryStream.Length);
+                ImageBase64 = Convert.ToBase64String(imageBytes);
+                await OnSelectedImage.InvokeAsync(ImageBase64);
+                ImageURL = null;
+                StateHasChanged();
+            }
+        }
+    }
+}

@@ -1,0 +1,62 @@
+﻿@page "/"
+@inject IRepository Repository
+@inject IMovieRepo _movieRepo
+@*<AuthorizeView>
+        <Authorized>
+            <b style="float:right; margin-bottom: 5%;">شما با موفقیت لاگین شدید</b>
+        </Authorized>
+        <NotAuthorized>
+            <b style="float:right;margin-bottom: 5%;">دسترسی شما مجاز نیست</b>
+        </NotAuthorized>
+    </AuthorizeView>*@
+
+
+<div class="container-fluid">
+    <div class="row mr-3 mb-2">
+        <h1 style="font-size: 28px" class="float-right font-weight-bold">روی پرده سینما</h1>
+    </div>
+    <hr />
+    <div class="row">
+        <MoviesList Movies="InTheaters"/>
+    </div>
+    <div class="row mr-3 mb-2">
+        <h1 style="font-size: 28px" class="float-right font-weight-bold"> در دست تولید</h1>
+        <hr />
+    </div>
+    <hr />
+    <div class="row">
+        <MoviesList Movies="Upcoming" />
+    </div>
+    <div class="row">
+        <CustomTypeahead SearchMethod="SearchMethod">
+            <ResultTemplate>
+                @context
+            </ResultTemplate>
+        </CustomTypeahead>
+    </div>
+</div>
+
+
+
+
+@code
+{
+    private List<Movie> InTheaters;
+    private List<Movie> Upcoming;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _movieRepo.GetIndexPageDto();
+        InTheaters = response.InTheaters;
+        Upcoming = response.UpcomingReleases;
+    }
+
+    private async Task<IEnumerable<string>> SearchMethod(string searchText)
+    {
+        await Task.Delay(2000);
+        if (searchText == "test") return Enumerable.Empty<string>();
+        return new List<string>() { "Django Course", "Blazor Course" };
+    }
+
+}

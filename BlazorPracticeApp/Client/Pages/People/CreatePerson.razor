@@ -1,0 +1,32 @@
+﻿@page "/person/create"
+@inject NavigationManager _nM
+@inject IPersonRepo _personRepo
+
+
+<div class="row mr-3 mb-2">
+    <h1 style="font-size: 28px" class="float-right font-weight-bold">افزودن هنرپیشه</h1>
+</div>
+<hr />
+<div class="row">
+    <PersonForm OnValidSubmit="addperson" Person="person" />
+</div>
+
+@code {
+    Person person = new Person();
+
+    public async Task addperson()
+    {
+        Console.WriteLine("person is creating");
+
+        try
+        {
+            await _personRepo.Create(person);
+            _nM.NavigateTo("people");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+
+        }
+    }
+}

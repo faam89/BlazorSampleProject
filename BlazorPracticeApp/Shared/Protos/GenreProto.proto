@@ -1,0 +1,36 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ShareMovieProto";
+
+package GenrePakage;
+
+service GenreProtoService{
+	rpc GetAllGenre (GenreRequest) returns (GenreReplay);
+	rpc GetGenreById (GetGenreByIdRequest) returns (GetGenreByIdReply);
+	rpc InsertGenre (GenreSendRequest) returns (GenreSendReply);
+	rpc DeleteGenre (GenreDeleteRequest) returns (GenreDeleteReplay);
+	rpc EditGenre (GenreEditRequest) returns (GenreEditReply);
+}
+
+message GenreRequest{}
+message GenreReplay{repeated GenreModle GenrePakage =1;}
+
+
+message GetGenreByIdRequest{int32 id =1;}
+message GetGenreByIdReply{GenreModle GenreM=1;}
+
+message GenreEditRequest{GenreModle GenreM = 1;}
+message GenreEditReply{}
+
+
+message GenreDeleteRequest{int32 id =1;}
+message GenreDeleteReplay{bool Deleted = 1; }
+
+message GenreSendRequest{GenreModle GenreM =1;}
+message GenreSendReply{bool sent=1;}
+
+
+message GenreModle{
+	int32 id = 1;
+	string name = 2;
+}

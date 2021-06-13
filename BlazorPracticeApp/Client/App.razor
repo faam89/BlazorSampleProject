@@ -1,0 +1,19 @@
+﻿<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <Authorizing>
+                <p> در حال وراد شدن هستید </p>
+            </Authorizing>
+            <NotAuthorized>
+                <strong>شما به این بخش دسترسی ندارید </strong>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <CascadingAuthenticationState>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <CustomNotFound></CustomNotFound>
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </NotFound>
+</Router>

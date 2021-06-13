@@ -1,0 +1,40 @@
+﻿@page "/genre/creat"
+@using BlazorPracticeApp.Client.Repositores
+@inject IGenreRepo  GenreRepo
+@inject NavigationManager NM
+
+
+<div class="container-fluid">
+    <div class="row mr-3 mb-2">
+        <h1 style="font-size: 28px" class="float-right font-weight-bold">افزودن ژانر جدید</h1>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <GenreForm OnValidSubmit="AddGenre" genre="genre" />
+</div>
+
+
+
+@code {
+    private Genre genre = new Genre();
+
+    public async Task AddGenre()
+    {
+        Console.WriteLine(genre.Name);
+
+        try
+        {
+            await GenreRepo.Create(genre);
+            NM.NavigateTo("genres");
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+    }
+}

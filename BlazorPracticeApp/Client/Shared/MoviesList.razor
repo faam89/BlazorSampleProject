@@ -1,0 +1,70 @@
+﻿@inject IJSRuntime Js
+@*<h2>Movie</h2>*@
+
+@*<label for="display-button">
+        <input type="checkbox" @bind="_displayButtons" id="display-button" />
+        hide / show
+    </label>*@
+
+@*<div class="row">
+    <div class="movies-container">  *@
+<GenricList List="Movies">
+    <NullTemplate>
+        <p style="color: red;">The Content Is Null</p>
+    </NullTemplate>
+
+    <EmptyTemplate>
+        <p style="color: red;">The Content Is Empty</p>
+    </EmptyTemplate>
+    <ElementTemplate>
+        <IndivisualMovie Movie="context" DisplayButton="_displayButtons" DeleteFn="DeleteMovieFn" />
+    </ElementTemplate>
+</GenricList>
+@*</div>
+    </div>*@
+
+<Confirmation @ref="confirmation" OnConfirm="onConfirm" OnCancel="OnCancel">
+    <strong style="float: right">آیا از حذف فیلم مورد نظر اطمینان دارید ؟</strong>
+</Confirmation>
+
+
+@code {
+
+    private Confirmation confirmation;
+    //bool displayButtons = true;
+    Movie movieForDelete;
+
+    [Parameter]
+    public List<Movie> Movies { get; set; }
+
+    bool _displayButtons = true;
+
+    public /*async Task*/ void DeleteMovieFn(Movie movie)
+    {
+        movieForDelete = movie;
+        confirmation.Show();
+
+        //await Js.ShowMessage("BEFORE DELETING CONFIRM");
+
+        //bool confirm = await Js.Confirm($"Are You Sure You Want To Delete {movie.Title} ?");
+
+        //if (confirm)
+        //{
+        //    Movies.Remove(movie);
+        //}
+    }
+    void onConfirm()
+    {
+        Movies.Remove(movieForDelete);
+        confirmation.Hide();
+        movieForDelete = null;
+    }
+
+    void OnCancel()
+    {
+        confirmation.Hide();
+        movieForDelete = null;
+    }
+
+
+}

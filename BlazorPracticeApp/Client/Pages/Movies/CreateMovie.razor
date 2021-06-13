@@ -1,0 +1,59 @@
+﻿@page "/movie/create"
+@inject NavigationManager _navigationManager
+@inject IMovieRepo _movieRepo
+@inject IGenreRepo _genreRepo
+@attribute [Authorize]
+
+<div class="container-fluid">
+
+
+    <div class="row mr-3 mb-2">
+        <h1 style="font-size: 28px" class="float-right font-weight-bold">افزودن فیلم جدید</h1>
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        @if (NotSelectedGenres != null)
+        {
+            <MovieForm Movie="@movie" OnValidSubmit="SaveMovie" NotSelectedGenres="@NotSelectedGenres" />
+        }
+
+    </div>
+</div>
+@*else
+    {
+        NotSelectedGenres = new List<Genre>()
+        {
+            new Genre{Id = 1,Name = "Action"},
+            new Genre{Id = 2,Name = "Comedy"},
+        };
+
+    <MovieForm Movie="@movie" OnValidSubmit="SaveMovie" NotSelectedGenres="@NotSelectedGenres" />
+    }*@
+
+@code {
+    Movie movie = new Movie();
+
+    private List<Genre> NotSelectedGenres;
+
+    protected override async Task OnInitializedAsync()
+    {
+        NotSelectedGenres = await _genreRepo.GetGenre();
+    }
+
+    private async Task SaveMovie()
+    {
+        try
+        {
+            var movieId = await _movieRepo.Create(movie);
+            _navigationManager.NavigateTo($"movie/{movieId}/{movie.Title.Replace(" ", "-")}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
+    }
+}
+

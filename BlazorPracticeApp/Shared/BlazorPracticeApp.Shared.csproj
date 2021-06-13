@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<!--<PackageReference Include="Google.Protobuf" Version="3.16.0" />
+		<PackageReference Include="Google.Protobuf.Tools" Version="3.16.0" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.37.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.37.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>-->
+    <PackageReference Include="Google.Protobuf" Version="3.13.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.31.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.31.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!--<PackageReference Include="Syncfusion.Blazor" Version="19.1.0.65" />-->
+    <!--<PackageReference Include="Syncfusion.Licensing" Version="19.1.0.65" />-->
+		<!--<PackageReference Include="System.ComponentModel" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />-->
+	</ItemGroup>
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+	<ItemGroup>
+    <Protobuf Include="**/Protos/*.proto" />
+	</ItemGroup>
+	<!--<ItemGroup>
+	  <None Remove="Protos\Movieproto.proto" />
+	</ItemGroup>-->
+
+  <!--<ItemGroup>
+    <Folder Include="Protos\" />
+  </ItemGroup>-->
+</Project>

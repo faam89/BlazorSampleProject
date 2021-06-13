@@ -1,0 +1,51 @@
+﻿syntax = "proto3";
+
+
+option csharp_namespace = "ShareMovieProto";
+
+
+package PersonPakage;
+
+
+//import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+
+service PersonProtoService{
+	rpc InsertPerson (PersonSendRequest) returns (PersonSendReply);
+	rpc GetAllPerson (PersonRequest) returns (PersonReplay);
+	rpc FilterPeopleByName (FilterPeopleRequest) returns (FilterPeopleReplay);
+	rpc GetPersonById (GetPersonByIdRequest) returns (GetPersonByIdReply);
+	rpc EditPerson (PersonEditRequest) returns (PersonEditReply);
+	rpc DeletePerson (PersonDeleteRequest) returns (PersonDeleteReplay);
+}
+
+message PersonRequest{}
+message PersonReplay{repeated PersonModle PersonPakage =1;}
+
+message FilterPeopleRequest{string searchText = 1;}
+message FilterPeopleReplay{repeated PersonModle PersonPakage =1;}
+
+
+message GetPersonByIdRequest{int32 id =1;}
+message GetPersonByIdReply{PersonModle PersonM=1;}
+
+message PersonEditRequest{PersonModle PersonM = 1;}
+message PersonEditReply{}
+
+
+message PersonDeleteRequest{int32 id =1;}
+message PersonDeleteReplay{bool Deleted = 1; }
+
+message PersonSendRequest{PersonModle PersonModle =1;}
+message PersonSendReply{int32 sentId=1;}
+
+
+message PersonModle{
+	int32 id = 1;
+	string name = 2;
+	string Biography = 3;
+	google.protobuf.StringValue Picture = 4;
+ 	google.protobuf.Timestamp Birthdate = 5; 
+}

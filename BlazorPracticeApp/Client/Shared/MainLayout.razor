@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4" style="z-index: 100;">
+        <LoginLinks/>
+    </div>
+
+    <div class="content px-4 mb-2" >
+        <CascadingValue Value="AppState">
+            @Body
+        </CascadingValue>
+    </div>
+</div>
+
+
+@code{
+
+    ApplicationState AppState = new ApplicationState();
+
+    public class ApplicationState
+    {
+        public string Color = "black";
+        public string Size = "30px";
+    }
+
+
+}

@@ -1,0 +1,74 @@
+﻿@*class="individual-movie-container"*@
+@*<div class="col-lg-3 mb-2 text-center item-Mov " >
+        <a href="@_movieUrl">
+            <img style="border-radius: 10px;" src="@Movie.Poster" alt="Poster Movie" class="movie-poster" />
+        </a>
+        <p>
+            <b>@Movie.TitleBrief</b>
+        </p>
+        <div>
+            <AuthorizeView>
+                <Authorized>
+                    <a class="btn btn-warning">ویرایش</a>
+                    <button class="btn btn-danger" @onclick="@(() => DeleteFn.InvokeAsync(Movie))">
+                        حذف
+                    </button>
+                </Authorized>
+                <NotAuthorized>
+                    <b>دسترسی شما مجاز نیست</b>
+                </NotAuthorized>
+            </AuthorizeView>
+
+
+        </div>
+    </div>*@
+<div class="col-lg-3 col-sm-12 mb-2 text-center item-Mov ">
+    <div class="card border-0" >
+        <a href="@_movieUrl">
+            <img style="border-radius: 10px;" src="@Movie.Poster" alt="Poster Movie" class="movie-poster card-img-top" />
+        </a>
+        <div class="card-body">
+            <h5 class="card-title">@Movie.Title</h5>
+            <p class="card-text">@Movie.Summary</p>
+            <AuthorizeView>
+                <Authorized>
+
+                    @*<a href="movie/create" style="text-decoration: none; color:white">  <SfButton CssClass="e-info"> ویرایش</SfButton></a>*@
+                    <SfButton CssClass="e-warning"><a class="awarning" href="movie/create" >ویرایش</a></SfButton>
+
+                    
+                    @*<button class="btn btn-danger" @onclick="@(() => DeleteFn.InvokeAsync(Movie))">
+                        حذف
+                    </button>*@
+                    <SfButton @onclick="@(() => DeleteFn.InvokeAsync(Movie))" class="delbtn" CssClass="e-danger">حذف</SfButton>
+
+                  
+                </Authorized>
+                <NotAuthorized>
+                    <b>دسترسی شما برای تغییرات مجاز نیست</b>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public Movie Movie { get; set; }
+
+    [Parameter]
+    public bool DisplayButton { get; set; }
+
+    [Parameter]
+    public EventCallback<Movie> DeleteFn { get; set; }
+
+    private string _movieUrl = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        _movieUrl = $"movie/{Movie.Id}/{Movie.Title.Replace(" ", "-")}";
+    }
+
+}

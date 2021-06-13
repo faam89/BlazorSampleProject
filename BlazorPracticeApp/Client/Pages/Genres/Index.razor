@@ -1,0 +1,92 @@
+﻿@page "/genres"
+@page "/genres/Index"
+@inject IGenreRepo  _genreRepo
+@inject NavigationManager _nM
+@attribute [Authorize]
+
+
+<div class="container-fluid">
+    <div class="row mr-3 mb-2">
+        <h3 class="float-right font-weight-bold " style="font-size: 28px">ژانرها </h3>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <a class="btn btn-primary float-right font-weight-bold mb-3" href="genre/creat">افزودن نقش</a>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="form-group">
+                @*<GenricList List="_genresList">
+                        <WholeListTemplate>
+                            <table class="table table-striped" style="border:1px gray solid">
+                                <thead>
+                                <tr>
+                                    <th>عملیات</th>
+                                    <th>نام نقش</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var item in _genresList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="genre/edit/@item.Id" class="btn btn-warning">ویرایش</a>
+                                            <button @onclick="(()=>DeleteBook(item.Id))" class="btn btn-danger">حذف</button>
+                                        </td>
+                                        <td>@item.Name</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </WholeListTemplate>
+                    </GenricList>*@
+
+
+                <SfGrid DataSource="@_genresList"EnableRtl="true" Height="359">
+                    <GridColumns>
+                        <GridColumn Field=@nameof(Genre.Name) HeaderText="<strong>نام نقش</strong>" DisableHtmlEncode="false" TextAlign="TextAlign.Center"></GridColumn>
+                        <GridColumn TextAlign="TextAlign.Center" AutoFit="true"  HeaderText=" علیات">
+                            <Template >
+                                @{
+                                    var item = (context as Genre);
+                                   
+                                        <SfButton CssClass="e-warning"><a class="awarning" href="genre/edit/@item.Id">ویرایش</a></SfButton>
+
+                                        <SfButton @onclick="(() => DeleteBook(item.Id))" class="delbtn" CssClass="e-danger">حذف</SfButton>
+                                    
+                                }
+                            </Template>
+                        </GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    List<Genre> _genresList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _genresList = await _genreRepo.GetGenre();
+            Console.WriteLine(_genresList);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.ToString());
+        }
+    }
+
+    public async Task DeleteBook(int id)
+    {
+        await _genreRepo.Delete(id);
+        _nM.NavigateTo("/genres", true);
+    }
+}

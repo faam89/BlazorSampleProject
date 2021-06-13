@@ -1,0 +1,39 @@
+﻿@page "/genre/edit/{GenreId:int}"
+@inject IGenreRepo _genreRepo
+@inject NavigationManager _nM
+
+
+<div class="container-fluid">
+    <div class="row mr-3 mb-2">
+        <h1 style="font-size: 28px" class="float-right font-weight-bold">ویرایش ژانر جدید</h1>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    @if (genre != null)
+    {
+        <GenreForm OnValidSubmit="EditG" genre="genre" />
+    }
+</div>
+
+@code {
+
+
+    public Genre genre;
+
+    [Parameter]
+    public int GenreId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        genre = await _genreRepo.GetGenreById(GenreId);
+    }
+
+    public async Task EditG()
+    {
+        await _genreRepo.UpdateGenre(genre);
+        _nM.NavigateTo("genres");
+    }
+}

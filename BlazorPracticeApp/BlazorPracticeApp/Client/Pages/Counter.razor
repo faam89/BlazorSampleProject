@@ -1,0 +1,24 @@
+﻿@page "/counter"
+
+<p>my name is : @myName</p>
+<hr />
+
+<p>@StringUtility.ToUpperCase("ali")</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<hr />
+<input type="number" @bind="currentCount" />
+<input type="text" @bind="myName" />
+<hr />
+@code{
+
+    private string myName = "";
+
+    private int currentCount = 0;
+
+    public void IncrementCount()
+    {
+        currentCount++;
+    }
+
+}

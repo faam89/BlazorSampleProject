@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <!--<PackageReference Include="Google.Protobuf" Version="3.16.0" />-->
+	  <!--<PackageReference Include="Grpc.Net.Client" Version="2.37.0" />-->
+	  <PackageReference Include="Grpc.Net.Client.Web" Version="2.37.0" />
+	  <!--<PackageReference Include="Grpc.Tools" Version="2.37.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>-->
+    <!--<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />-->
+    <!--<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.1" PrivateAssets="all" />
+    <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />-->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.2" PrivateAssets="all" />
+    <PackageReference Include="Syncfusion.Blazor" Version="19.1.0.65" />
+    <PackageReference Include="Syncfusion.Licensing" Version="19.1.0.65" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.14" />
+    <PackageReference Include="Tewr.Blazor.FileReader" Version="3.0.0.20340" />
+	  <PackageReference Include="Markdig" Version="0.24.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\BlazorPracticeApp.Shared.csproj" />
+  </ItemGroup>
+
+  
+
+</Project>

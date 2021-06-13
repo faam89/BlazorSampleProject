@@ -1,0 +1,39 @@
+﻿@page "/person/edit/{PersonId:int}"
+@inject IPersonRepo _PersomRepo
+@inject NavigationManager _nM
+
+<div class="row mr-3 mb-2">
+    <h1 style="font-size: 28px" class="float-right font-weight-bold">افزودن هنرپیشه</h1>
+</div>
+<hr />
+<div class="row">
+    @if (person != null)
+    {
+        <PersonForm OnValidSubmit="Edit" Person="person" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int PersonId { get; set; }
+
+    Person person;
+
+    protected override async Task OnInitializedAsync()
+    {
+        person = await _PersomRepo.GetPersonById(PersonId);
+
+        //    new Person()
+        //{
+        //    Id = 1, Name = "amin",Birthdate=DateTime.Now,Biography="I Am FullStack Developer",
+        //};
+        //Console.WriteLine($"MovieId Is : {PersonId}");
+    }
+
+    private async Task Edit()
+    {
+        Console.WriteLine("Person Is Editing");
+        await _PersomRepo.UpdatePerson(person);
+        _nM.NavigateTo("people");
+    }
+}

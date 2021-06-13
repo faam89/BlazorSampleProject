@@ -1,0 +1,14 @@
+﻿@page "/logout"
+@inject ILoginService loginService
+@inject NavigationManager navigationManager
+
+<text>در حال خروج هستید ...</text>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await loginService.LogOut();
+        navigationManager.NavigateTo("Login");
+    }
+
+}

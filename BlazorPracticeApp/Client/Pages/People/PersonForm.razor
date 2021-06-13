@@ -1,0 +1,65 @@
+﻿
+<div style="width:100%">
+    <EditForm Model="Person" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="col-lg-12 form-group d-inline-block">
+            <label for="name" class="float-right"> <strong>نام :</strong></label>
+            <InputText class="form-control" @bind-Value="Person.Name" id="name" />
+            <ValidationMessage For="@(()=>Person.Name)" />
+        </div>
+
+        <div class="col-lg-12 form-group d-inline-block">
+            <label class="float-right" for="birthdate">
+                <strong>تاریخ تولد :</strong>
+            </label>
+            <InputDate TValue="DateTime?" class="form-control" style="text-align: right;" @bind-Value="Person.Birthdate" id="birthDate" />
+            <ValidationMessage For="@(() => Person.Birthdate)" />
+        </div>
+        <div class="col-lg-12 float-right form-group">
+            <InputImage Label="تصویر هنرپیشه" ImageURL="@(ImageUrl)" OnSelectedImage="@PictureSelected" />
+        </div>
+        <div class="row form-group form-markdown">
+            <div class="col-lg-12">
+                <strong class="float-right">تبدیل به متن</strong>
+                <hr class="hrfix" />
+            </div>
+            <div class="col-lg-12">
+                <InputMarkdown @bind-Value="@Person.Biography" For="@(()=>Person.Biography)" Label="Biography" />
+            </div>
+        </div>
+
+        @*<button class="btn btn-success float-right mr-3" type="submit">افزودن</button>*@
+        <SfButton CssClass="e-success" style="float: right; width: 100px; height: 30px;" EnableRtl="false" type="submit" IsPrimary="true">افزودن</SfButton>
+
+    </EditForm>
+</div>
+
+
+@code {
+
+    //"/Images/People/"+
+
+    [Parameter]
+    public Person Person { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    string ImageUrl;
+
+    protected override void OnInitialized()
+    {
+        if (!string.IsNullOrEmpty(Person.Picture))
+        {
+            ImageUrl = Person.Picture;
+            Person.Picture = null;
+        }
+    }
+
+    private void PictureSelected(string imageBase64)
+    {
+        Person.Picture = imageBase64;
+        ImageUrl = null;
+        Console.WriteLine(imageBase64);
+    }
+}

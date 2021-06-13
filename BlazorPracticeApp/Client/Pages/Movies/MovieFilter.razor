@@ -1,0 +1,111 @@
+﻿@page "/movies/search"
+@using Syncfusion.Blazor.PdfViewer
+@inject IMovieRepo _movieRepo
+@inject IRepository repository
+@inject IGenreRepo _genreRepo
+@attribute [Authorize]
+
+<div class="container-fluid">
+    <div class="row mr-3 mb-2">
+        <h3 class="float-right font-weight-bold " style="font-size: 28px">فیلتر فیلم ها </h3>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="form-inline" style="margin: 30px 4px;">
+            <div class="form-group mb-2">
+                <label for="@title" class="sr-only">عنوان</label>
+                @*<input type="text"
+                    class="form-control"
+                    placeholder="عنوان فیلم را وارد کنید"
+                    @bind-value="title"
+                    @bind-value:event="oninput"
+                    @onkeypress="@((KeyboardEventArgs e) => TitleKeyPress(e))" />*@
+                <SfTextBox @bind-value="@title" FloatLabelType='@FloatLabelType.Auto' @onkeypress='@(e => TitleKeyPress(e))' Placeholder="نام فیلم را وارد کنید" CssClass="e-rtl"></SfTextBox>
+
+            </div>
+            <div class="form-group mx-sm-2 mb-2">
+                @*<select class="form-control" @bind="selectedGenre">
+                        <option value="0">--انتخاب ژانر--</option>
+                        @foreach (var genre in Genres)
+                        {
+                            <option class="font-weight-bolder" value="@genre.Id">@genre.Name</option>
+                        }
+                    </select>*@
+                <SfDropDownList @bind-Value="DropVal" TValue="int?" TItem="Genre" EnableRtl="true" PopupHeight="230px" Placeholder="--انتخاب ژانر--" DataSource="@Genres">
+                    <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                </SfDropDownList>
+            </div>
+            @*<div class="form-group mx-sm-2 mb-2">
+                    <input type="checkbox" @bind="upcomingReleases" id="inTheaters" class="form-check-inline" />
+                    <label for="@upcomingReleases" class="form-check-label">منتشر نشده</label>
+                </div>*@
+            <div class="form-group mx-sm-2 mb-2">
+                @*<input type="checkbox" @bind="inTheaters" id="inTheaters" class="form-check-inline" />*@
+                <SfCheckBox @bind-Checked="inTheaters" id="inTheaters"> </SfCheckBox>
+
+                <label for="@inTheaters" class="form-check-label font-weight-bolder">روی پرده</label>
+            </div>
+            @*<button type="button" class="btn btn-primary mb-2 mx-sm-3 font-weight-bolder" @onclick="SearchForMovies">فیلتر کن</button>
+                <button type="button" class="btn btn-danger mb-2 font-weight-bolder" @onclick="Clear">برداشتن فیلتر</button>*@
+            <SfButton @onclick="( SearchForMovies)" class=" mb-2 mx-sm-3 font-weight-bolder" CssClass="e-primary">فیلتر کن</SfButton>
+            <SfButton @onclick="(Clear)" class="mb-2 font-weight-bolder" CssClass="e-warning  ">برداشتن فیلتر</SfButton>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <MoviesList Movies="Movies" />
+    </div>
+</div>
+
+<style>
+    .e-input-group {
+        margin: 0 !important;
+    }
+</style>
+
+@code {
+    string title = "";
+    string selectedGenre = "0";
+    List<Genre> Genres = new List<Genre>();
+    /* { new Genre { Id = 1, Name = "Comedy" }, new Genre { Id = 2, Name = "Action" } }*/
+    bool upcomingReleases = false;
+    bool inTheaters = false;
+    private List<Movie> Movies;
+    public int? DropVal { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Movies = await _movieRepo.GetAll(title, inTheaters, DropVal ?? 0);
+        Genres = await _genreRepo.GetGenre();
+        DropVal = null;
+    }
+
+    private async Task SearchForMovies()
+    {
+        Movies = await _movieRepo.GetAll(title, inTheaters, DropVal ?? 0);
+        Console.WriteLine($"title : {title}");
+        Console.WriteLine($"selectedGenre : {selectedGenre}");
+        Console.WriteLine($"upcomingReleases : {upcomingReleases}");
+        Console.WriteLine($"inTheaters : {inTheaters}");
+        Console.WriteLine($"genreId : {DropVal}");
+        Console.WriteLine(Movies);
+    }
+
+    private async Task Clear()
+    {
+        Movies = await _movieRepo.GetAll(title, inTheaters, DropVal ?? 0);
+        title = "";
+        selectedGenre = "0";
+        upcomingReleases = false;
+        inTheaters = false;
+        DropVal = null;
+    }
+
+
+    private void TitleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            SearchForMovies();
+        }
+    }
+}

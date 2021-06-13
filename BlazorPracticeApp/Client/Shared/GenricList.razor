@@ -1,0 +1,60 @@
+﻿@typeparam TItem
+
+@if (List == null)
+{
+    <img src="/comp-2.gif" style="width:25px;height:25px;" />
+    @if (NullTemplate != null)
+    {
+        @NullTemplate
+    }
+    else
+    {
+        <p style="color:blue">This Message Is Inform For Null Template</p>
+    }
+}
+
+else if (List.Count == 0)
+{
+    @if (EmptyTemplate != null)
+    {
+        @EmptyTemplate
+    }
+    else
+    {
+        <p style="color:darkgreen">This Message Is Inform For Empty Template</p>
+    }
+}
+
+else
+{
+
+    if (ElementTemplate != null)
+    {
+        @foreach (var element in List)
+        {
+            @ElementTemplate(element)
+        }
+    }
+    else
+    {
+        @WholeListTemplate
+    }
+
+}
+
+@code {
+    [Parameter]
+    public RenderFragment NullTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment EmptyTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem> ElementTemplate { get; set; }
+    
+    [Parameter]
+    public RenderFragment WholeListTemplate { get; set; }
+
+    [Parameter]
+    public List<TItem> List { get; set; }
+}

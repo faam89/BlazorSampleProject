@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject IRepositoy Repository
+
+
+<MoviesList Movies="movies" />
+
+@code
+{
+    private List<Movie> movies;
+
+
+    protected override void OnInitialized()
+    {
+        movies = Repository.GetMovie();
+    }
+
+}

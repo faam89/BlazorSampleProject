@@ -1,0 +1,162 @@
+﻿@page "/movie/{MovieId:int}"
+@page "/movie/{MovieId:int}/{MovieTitle}"
+@inject IMovieRepo _movieRepo
+
+<div class="container-fluid">
+    <div class="row">
+        <h3> </h3>
+
+        @if (model == null)
+        {
+            @*<text>Loading ...</text>*@
+            <img src="/comp-2.gif" style="width:25px;height:25px;" />
+
+        }
+        else
+        {
+            <div class="card" style="width: 100%; text-align: right">
+                @*<div style="display: flex">
+                        <span style="display: inline-block; margin-right: 5px;">
+                            <img src="@model.MovieDto.Poster" alt="@model.MovieDto.Title" style="width: 225px; height: 315px;" />
+                        </span>
+                    </div>*@
+
+                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel" style="height: 800px;">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="@model.MovieDto.Poster" alt="@model.MovieDto.Title" class="d-block w-100" style="height: 800px;" />
+                        </div>
+                        @*<div class="carousel-item">
+                                <img src="..." class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="..." class="d-block w-100" alt="...">
+                            </div>*@
+                    </div>
+                </div>
+                <div class="card-body">
+                    @*<div clss="row"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12"></div>*@
+
+
+                    <div clss="row card-title">
+                        <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                            <strong>نام فیلم </strong>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <span>
+                                @model.MovieDto.Title (
+                                @if (model.MovieDto.ReleaseDate != null)
+                                {
+                                    @model.MovieDto.ReleaseDate.Value.ToString("yyyy")
+                                }
+                                )
+                            </span>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="card-text">
+                        <div clss="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <strong>
+                                    خلاصه داستان
+                                </strong>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <RenderMarkdown MarkdownContent="@model.MovieDto.Summary" />
+                            </div>
+                        </div>
+                        <hr />
+
+                        <div clss="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <strong>ژانر</strong>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <span>
+                                    @for (int i = 0; i < model.Genres.Count; i++)
+                                    {
+                                        if (i < model.Genres.Count - 1)
+                                        {
+                                            @linkGenres(model.Genres[i])<text> ,</text>
+                                        }
+                                        else
+                                        {
+                                            @linkGenres(model.Genres[i])
+                                        }
+                                    }
+                                </span>
+                                <text> | </text>
+                                <span>
+                                    @if (model.MovieDto.ReleaseDate != null)
+                                    {
+                                        @model.MovieDto.ReleaseDate.Value.ToString("dd MM yyyy")
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div clss="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                <strong>بازیگران</strong>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div style="display: flex; flex-direction: column">
+                                    @foreach (var actor in model.Actors)
+                                    {
+                                        <div style="margin-bottom: 2%;">
+                                            <img src="@actor.Picture" alt="@actor.Name" style="width: 50px" />
+                                            <span style="display: inline-block; width: 200px;">
+                                                <a href="/person/@actor.Id/@actor.Name.Replace(" ", "-")">@actor.Name</a>
+                                            </span>
+                                            <span style="display: inline-block; width: 45px">...</span>
+                                            <span>@actor.Character</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            @*@for (int i = 0; i < model.MovieDto.MovieGenres.Count; i++)
+                {
+                    if (i < model.Genres.Count - 1)
+                    {
+                        @linkGenres(model.Genres[i])<text> ,</text>
+                    }
+                    else
+                    {
+                        @linkGenres(model.Genres[i])
+                    }
+                }*@
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int MovieId { get; set; }
+
+    [Parameter]
+    public string MovieTitle { get; set; }
+
+    [Parameter]
+    public string MovieName { get; set; }
+
+    DetailMovieDTO model;
+
+    private RenderFragment<Genre> linkGenres = (genre) =>@<a href="movies/search?genreId=@genre.Id">@genre.Name</a>;
+
+protected override async Task OnInitializedAsync()
+{
+model = await _movieRepo.GetDetailMovieDTO(MovieId);
+
+//Console.WriteLine(model.MovieDto.Title + "test");
+Console.WriteLine(model.MovieDto.MovieGenres.Count + " test");
+//await base.OnInitializedAsync();
+}
+}

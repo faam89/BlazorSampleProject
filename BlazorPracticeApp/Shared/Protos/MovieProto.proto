@@ -1,0 +1,93 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "ShareMovieProto";
+
+package MoviePakage;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+//import "Protos/GenreProto.proto";
+//import "Protos/PersonProto.proto";
+
+
+service MovieProtoService{
+	rpc InsertMovie (MovieSendRequest) returns (MovieSendReply);
+	rpc GetIndexPageInfo (MovieGetIPIRequest) returns (MovieGetIPIReply);
+	rpc GetDetailMovieDTO (MovieDetailDTORequest) returns (MovievDetailDTOReply);
+	rpc GetMovieForFilter (MovieRequest) returns (MovievReply);
+}
+
+message MovieSendRequest{MovieModel MovieM =1;}
+message MovieSendReply{int32 id=1;}
+
+message MovieRequest{
+string title=1;
+int32 genreId = 2;
+bool inTheaters = 3;
+}
+message MovievReply{repeated MovieModel  MoviePakage=1;}
+
+message MovieGetIPIRequest{}
+message MovieGetIPIReply{IndexPageDTOProto IndexPageDTOModel=1;}
+
+message MovieDetailDTORequest{int32 id = 1;}
+message MovievDetailDTOReply{DetailMovieModel DetailMovie=1;}
+
+
+
+message  DetailMovieModel{
+	int32 id = 1;
+	string title = 2;
+	string summary = 3;
+	bool inTheater = 4;
+	string trailer = 5;
+	google.protobuf.Timestamp releaseDate = 6; 
+	google.protobuf.StringValue poster = 7;
+	string titleBrief = 8;
+	repeated GenreMo GenreM = 9;
+	repeated PersonMo PersonM = 10;
+
+	message GenreMo{
+	int32 id = 1;
+	string name = 2;}
+
+	message PersonMo{
+	int32 id = 1;
+	string name = 2;
+	string Character = 3;
+	google.protobuf.StringValue Picture = 4;
+ 	//google.protobuf.Timestamp Birthdate = 5;
+	 }
+}
+message MovieModel {
+    int32 id = 1;
+	string title = 2;
+	string summary = 3;
+	bool inTheater = 4;
+	string trailer = 5;
+	google.protobuf.Timestamp releaseDate = 6; 
+	google.protobuf.StringValue poster = 7;
+	string titleBrief = 8;
+	repeated MovieActorModel MovieActorM = 9;
+	repeated MovieGenreModel MovieGenreM = 10;
+	
+	message MovieActorModel {
+	int32 PersonId = 1;
+	int32 Order = 2;
+	int32 MovieId = 3;
+	string Character = 4; }
+	
+	message MovieGenreModel {
+	int32 GenreId = 1;
+	int32 MovieId = 2; }
+}
+
+/*message DetailMovieDTOProto {
+	MovieModel MovieM = 1;
+	repeated  GenrePakage.GenreModle GenreM  = 2;
+	repeated PersonPakage.PersonModle PersonM  = 3;
+}*/
+message IndexPageDTOProto {
+	repeated MovieModel inTheaters =1;
+	repeated MovieModel upcomingReleases =2;
+}

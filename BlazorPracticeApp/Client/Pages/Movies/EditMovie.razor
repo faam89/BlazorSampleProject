@@ -1,0 +1,38 @@
+﻿@page "/movie/edit/{MovieId:int}"
+@attribute [Authorize]
+
+<h3>ویرایش فیلم</h3>
+
+<MovieForm Movie="movie" OnValidSubmit="EditMo" NotSelectedGenres="NotSelectedGenres" SelectedGenres="SelectedGenres" />
+
+@code {
+
+    [Parameter]
+    public int MovieId { get; set; }
+
+    Movie movie;
+
+    private List<Genre> NotSelectedGenres = new List<Genre>
+{
+        new Genre{Id = 2, Name = "comedy"},
+    };
+
+    private List<Genre> SelectedGenres = new List<Genre>
+{
+        new Genre{Id = 1, Name = "action"},
+        new Genre{Id = 3, Name = "drama"},
+
+    };
+
+    protected override void OnInitialized()
+    {
+        movie = new Movie() { Id = MovieId, Title = "آموزش بلیزور", ReleaseDate = new DateTime(1400, 01, 30) };
+        Console.WriteLine($"MovieId Is : {MovieId}");
+    }
+
+    private void EditMo()
+    {
+        Console.WriteLine("Editing Movie Is Running");
+        Console.WriteLine($"MovieId Is : {MovieId}");
+    }
+}
